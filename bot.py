@@ -94,9 +94,9 @@ async def on_add(ctx):
         if 10 >= value >= 0:
             user = ctx.author.name
             Users[user] = value
-            ctx.author.send(f'Your registered score is {value}')
+            await ctx.author.send(f'Your registered score is {value}')
         else:
-            ctx.author.send(f'Wrong number format')
+            await ctx.author.send(f'Wrong number format')
 
 
 if __name__ == "__main__":
