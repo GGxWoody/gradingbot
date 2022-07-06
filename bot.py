@@ -37,10 +37,17 @@ async def event_ready():
 async def event_message(ctx):
     if ctx.author.name.lower() == BOT_NICK.lower():
         return
-    try:
+    message_cut = ctx.content.split()
+    print(type(message_cut))
+    message_check = ''
+    if len(message_cut) == 1:
+        message_check = ctx.content
+    elif message_cut[0] == '!score':
+        message_check = ctx.content.split()[0]
+
+    print(message_check)
+    if message_check in ['!start', '!stop', '!score', '!last']:
         await bot.handle_commands(ctx)
-    except CommandNotFound:
-        print("Not a command")
 
 
 @bot.command(name='start')
@@ -49,22 +56,25 @@ async def start_grade(ctx):
         global isGradingActive, Users
         Users = {}
         isGradingActive = True
+        print(isGradingActive)
 
 
 @bot.command(name='stop')
 async def stop_grade(ctx):
     global isGradingActive, Users
-    if ctx.author.is_mod and len(Users) > 0:
+    if ctx.author.is_mod and len(Users) > 0 and isGradingActive:
         isGradingActive = False
         all_grades = 0
         for val in Users.values():
             all_grades += val
         new_maximum_val = max(Users.keys(), key=(lambda new_k: Users[new_k]))
         new_minimum_val = min(Users.keys(), key=(lambda new_k: Users[new_k]))
-        await ctx.send(f'Score: {round(all_grades/len(Users),6)} Voters: {len(Users)} High: {Users[new_maximum_val]} ({new_maximum_val}), Low: {Users[new_minimum_val]}({new_minimum_val})')
-    if ctx.author.is_mod and len(Users) == 0:
+        await ctx.send(f'Score: {round(all_grades/len(Users),6)} Voters: {len(Users)} '
+                       f'High: {Users[new_maximum_val]} ({new_maximum_val}) '
+                       f'Low: {Users[new_minimum_val]}({new_minimum_val})')
+    elif ctx.author.is_mod and len(Users) == 0:
         isGradingActive = False
-        await ctx.send(f'No votes')
+        await ctx.send(f'No votes or no grading started')
 
 
 @bot.command(name='last')
@@ -76,8 +86,9 @@ async def last_grade(ctx):
             all_grades += val
         new_maximum_val = max(Users.keys(), key=(lambda new_k: Users[new_k]))
         new_minimum_val = min(Users.keys(), key=(lambda new_k: Users[new_k]))
-        await ctx.send(
-            f'Score: {round(all_grades / len(Users), 6)} Voters: {len(Users)} High: {Users[new_maximum_val]} ({new_maximum_val}) Low: {Users[new_minimum_val]} ({new_minimum_val})')
+        await ctx.send(f'Score: {round(all_grades / len(Users), 6)} Voters: {len(Users)} '
+                       f'High: {Users[new_maximum_val]} ({new_maximum_val}) '
+                       f'Low: {Users[new_minimum_val]} ({new_minimum_val})')
     if ctx.author.is_mod and len(Users) == 0:
         await ctx.send(f'No votes on previous grade')
 
@@ -96,9 +107,10 @@ async def on_add(ctx):
             value = -1
         if 10 >= value >= 0:
             Users[user] = value
+            await ctx.send(f'@{user} Score saved')
         else:
             await ctx.send(f'@{user} Wrong score format')
-    if ctx.author.name not in Users:
+    if ctx.author.name in Users:
         await ctx.send(f'@{user} Already graded')
 
 
