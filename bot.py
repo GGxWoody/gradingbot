@@ -97,7 +97,7 @@ async def on_add(ctx):
         else:
             ctx.send(f'@{user} Wrong score format')
     if ctx.author.name not in Users:
-        ctx.send(f'@{user}Already graded')
+        ctx.send(f'@{user} Already graded')
 
 
 if __name__ == "__main__":
