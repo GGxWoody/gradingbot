@@ -83,6 +83,7 @@ async def last_grade(ctx):
 @bot.command(name='score')
 async def on_add(ctx):
     global isGradingActive, Users
+    user = ctx.author.name
     if isGradingActive and ctx.author.name not in Users:
         command_string = ctx.message.content
         command_string = command_string.replace('!score', '').strip()
@@ -92,12 +93,11 @@ async def on_add(ctx):
         except ValueError:
             value = -1
         if 10 >= value >= 0:
-            user = ctx.author.name
             Users[user] = value
         else:
-            ctx.reply('Wrong score format')
+            ctx.send(f'@{user} Wrong score format')
     if ctx.author.name not in Users:
-        ctx.reply('Already graded')
+        ctx.send(f'@{user}Already graded')
 
 
 if __name__ == "__main__":
