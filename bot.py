@@ -37,8 +37,14 @@ async def event_ready():
 async def event_message(ctx):
     if ctx.author.name.lower() == BOT_NICK.lower():
         return
+    message_check = ''
+    if len(ctx.message.content()) <= 6:
+        message_check = ctx.message.content()
+    else:
+        message_check = ctx.message.content()[0:5]
 
-    await bot.handle_commands(ctx)
+    if message_check in ['!start', '!stop', '!score', '!last']:
+        await bot.handle_commands(ctx)
 
 
 @bot.command(name='start')
