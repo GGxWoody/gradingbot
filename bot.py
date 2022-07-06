@@ -56,8 +56,8 @@ async def start_grade(ctx):
 
 @bot.command(name='stop')
 async def stop_grade(ctx):
-    if ctx.author.is_mod:
-        global isGradingActive, Users
+    global isGradingActive, Users
+    if ctx.author.is_mod and len(Users) > 0:
         isGradingActive = False
         all_grades = 0
         for val in Users.values():
@@ -65,6 +65,9 @@ async def stop_grade(ctx):
         new_maximum_val = max(Users.keys(), key=(lambda new_k: Users[new_k]))
         new_minimum_val = min(Users.keys(), key=(lambda new_k: Users[new_k]))
         await ctx.send(f'Score: {round(all_grades/len(Users),6)} Voters: {len(Users)} High: {Users[new_maximum_val]} ({new_maximum_val}), Low: {Users[new_minimum_val]}({new_minimum_val})')
+    if ctx.author.is_mod and len(Users) == 0:
+        isGradingActive = False
+        await ctx.send(f'No votes')
 
 
 @bot.command(name='last')
