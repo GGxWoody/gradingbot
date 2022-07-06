@@ -1,9 +1,7 @@
 import os
-import json
 
-from pathlib import Path
 from dotenv import load_dotenv
-from os.path import join, dirname
+from os.path import join
 from twitchio.ext import commands
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -17,9 +15,6 @@ BOT_NICK = os.environ.get('BOT_NICK')
 BOT_PREFIX = os.environ.get('BOT_PREFIX')
 CHANNEL = os.environ.get('CHANNEL')
 
-JSON_FILE = str(os.path.dirname(os.path.realpath(__file__))) + '/data.json'
-
-
 bot = commands.Bot(
     irc_token=TMI_TOKEN,
     client_id=CLIENT_ID,
@@ -30,7 +25,6 @@ bot = commands.Bot(
 
 Users = {}
 isGradingActive = False
-
 
 @bot.event
 async def event_ready():
@@ -73,7 +67,7 @@ async def stop_grade(ctx):
 @bot.command(name='last')
 async def last_grade(ctx):
     global Users
-    if ctx.author.is_mod:
+    if ctx.author.is_mod and len(Users) > 0:
         all_grades = 0
         for val in Users.values():
             all_grades += val
@@ -81,6 +75,8 @@ async def last_grade(ctx):
         new_minimum_val = min(Users.keys(), key=(lambda new_k: Users[new_k]))
         await ctx.send(
             f'Score: {round(all_grades / len(Users), 6)} Voters: {len(Users)} High: {Users[new_maximum_val]} ({new_maximum_val}) Low: {Users[new_minimum_val]} ({new_minimum_val})')
+    if ctx.author.is_mod and len(Users) == 0:
+        await ctx.send(f'No votes on previous grade')
 
 
 @bot.command(name='score')
@@ -98,6 +94,9 @@ async def on_add(ctx):
         if 10 >= value >= 0:
             user = ctx.author.name
             Users[user] = value
+            ctx.author.send(f'Your registered score is {value}')
+        else:
+            ctx.author.send(f'Wrong number format')
 
 
 if __name__ == "__main__":
