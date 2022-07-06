@@ -90,13 +90,12 @@ async def on_add(ctx):
             value = round(value, 3)
         except ValueError:
             value = -1
-
+        user = ctx.author.name
         if 10 >= value >= 0:
-            user = ctx.author.name
             Users[user] = value
-            await ctx.author.send(f'Your registered score is {value}')
+            await ctx.wisper(user, f'Your registered score is {value}')
         else:
-            await ctx.author.send(f'Wrong number format')
+            await ctx.wisper(user, f'Wrong number format')
 
 
 if __name__ == "__main__":
