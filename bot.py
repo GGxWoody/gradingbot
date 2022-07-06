@@ -38,14 +38,12 @@ async def event_message(ctx):
     if ctx.author.name.lower() == BOT_NICK.lower():
         return
     message_cut = ctx.content.split()
-    print(type(message_cut))
     message_check = ''
     if len(message_cut) == 1:
         message_check = ctx.content
     elif message_cut[0] == '!score':
         message_check = ctx.content.split()[0]
 
-    print(message_check)
     if message_check in ['!start', '!stop', '!score', '!last']:
         await bot.handle_commands(ctx)
 
@@ -56,7 +54,6 @@ async def start_grade(ctx):
         global isGradingActive, Users
         Users = {}
         isGradingActive = True
-        print(isGradingActive)
 
 
 @bot.command(name='stop')
