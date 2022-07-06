@@ -85,7 +85,7 @@ async def on_add(ctx):
     global isGradingActive, Users
     if isGradingActive and ctx.author.name not in Users:
         command_string = ctx.message.content
-        command_string = command_string.replace('!grade', '').strip()
+        command_string = command_string.replace('!score', '').strip()
         try:
             value = float(command_string)
             value = round(value, 3)
