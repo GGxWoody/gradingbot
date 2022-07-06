@@ -26,6 +26,7 @@ bot = commands.Bot(
 Users = {}
 isGradingActive = False
 
+
 @bot.event
 async def event_ready():
     """ Runs once the bot has established a connection with Twitch """
@@ -90,12 +91,13 @@ async def on_add(ctx):
             value = round(value, 3)
         except ValueError:
             value = -1
-        user = ctx.author.name
         if 10 >= value >= 0:
+            user = ctx.author.name
             Users[user] = value
-            await ctx.wisper(user, f'Your registered score is {value}')
         else:
-            await ctx.wisper(user, f'Wrong number format')
+            ctx.reply('Wrong score format')
+    if ctx.author.name not in Users:
+        ctx.reply('Already graded')
 
 
 if __name__ == "__main__":
