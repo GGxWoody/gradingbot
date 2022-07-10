@@ -1,4 +1,5 @@
 import os
+import random
 
 from dotenv import load_dotenv
 from os.path import join
@@ -42,9 +43,11 @@ class Bot(commands.Bot):
                 all_grades += val
             new_maximum_val = max(Users.keys(), key=(lambda new_k: Users[new_k]))
             new_minimum_val = min(Users.keys(), key=(lambda new_k: Users[new_k]))
+            max_keys = [key for key, value in Users.items() if value == max(Users.values())]
+            min_keys = [key for key, value in Users.items() if value == min(Users.values())]
             await ctx.send(f'Score: {round(all_grades/len(Users),6)} Voters: {len(Users)} '
-                           f'High: {Users[new_maximum_val]} ({new_maximum_val}) '
-                           f'Low: {Users[new_minimum_val]}({new_minimum_val})')
+                           f'High: {Users[new_maximum_val]} ({random.choices(max_keys)[0]}) '
+                           f'Low: {Users[new_minimum_val]}({random.choices(min_keys)[0]})')
         elif ctx.author.is_mod and len(Users) == 0:
             isGradingActive = False
             await ctx.send(f'No votes or no grading started')
