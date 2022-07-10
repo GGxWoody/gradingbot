@@ -13,11 +13,12 @@ TOKEN = os.environ.get('TOKEN')
 BOT_NICK = os.environ.get('BOT_NICK')
 BOT_PREFIX = os.environ.get('BOT_PREFIX')
 CHANNEL = os.environ.get('CHANNEL')
+Users = {}
+isGradingActive = False
 
 
 class Bot(commands.Bot):
-    Users = {}
-    isGradingActive = False
+
 
     def __init__(self):
         # Initialise our Bot with our access token, prefix and a list of channels to join on boot...
