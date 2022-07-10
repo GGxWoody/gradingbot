@@ -50,7 +50,7 @@ class Bot(commands.Bot):
                            f'Low: {Users[new_minimum_val]}({random.choices(min_keys)[0]})')
         elif ctx.author.is_mod and len(Users) == 0:
             isGradingActive = False
-            await ctx.send(f'No votes or no grading started')
+            #await ctx.send(f'No votes or no grading started')
 
     @commands.command(name='last')
     async def last_grade(self, ctx):
@@ -61,9 +61,11 @@ class Bot(commands.Bot):
                 all_grades += val
             new_maximum_val = max(Users.keys(), key=(lambda new_k: Users[new_k]))
             new_minimum_val = min(Users.keys(), key=(lambda new_k: Users[new_k]))
+            max_keys = [key for key, value in Users.items() if value == max(Users.values())]
+            min_keys = [key for key, value in Users.items() if value == min(Users.values())]
             await ctx.send(f'Score: {round(all_grades / len(Users), 6)} Voters: {len(Users)} '
-                           f'High: {Users[new_maximum_val]} ({new_maximum_val}) '
-                           f'Low: {Users[new_minimum_val]} ({new_minimum_val})')
+                           f'High: {Users[new_maximum_val]} ({random.choices(max_keys)[0]}) '
+                           f'Low: {Users[new_minimum_val]} ({random.choices(min_keys)[0]})')
         if ctx.author.is_mod and len(Users) == 0:
             await ctx.send(f'No votes on previous grade')
 
@@ -92,6 +94,7 @@ class Bot(commands.Bot):
             command_string = ctx.message.content
             command_string = command_string.replace('!score', '').strip()
             command_string = command_string.split()
+            print(command_string)
             if command_string[0] not in Users:
                 try:
                     value = float(command_string[1])
