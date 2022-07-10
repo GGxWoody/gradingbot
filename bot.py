@@ -80,6 +80,7 @@ class Bot(commands.Bot):
                 value = round(value, 3)
             except ValueError:
                 value = -1
+                await ctx.send(f'@{user} wrong number format')
             if 10 >= value >= 0:
                 Users[user] = value
                 print(f'{len(Users)} and user: {user} score added')
