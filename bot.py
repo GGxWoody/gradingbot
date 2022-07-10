@@ -104,6 +104,7 @@ async def on_add(ctx):
             value = -1
         if 10 >= value >= 0:
             Users[user] = value
+            print(f'{len(Users)} and user: {user} score added')
 
 
 if __name__ == "__main__":
