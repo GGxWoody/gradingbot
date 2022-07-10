@@ -92,7 +92,7 @@ class Bot(commands.Bot):
         global isGradingActive, Users
         if ctx.author.is_mod and isGradingActive:
             command_string = ctx.message.content
-            command_string = command_string.replace('!score', '').strip()
+            command_string = command_string.replace('!addscore', '').strip()
             command_string = command_string.split()
             print(command_string)
             if command_string[0] not in Users:
