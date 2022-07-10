@@ -94,6 +94,7 @@ async def last_grade(ctx):
 async def on_add(ctx):
     global isGradingActive, Users
     user = ctx.author.name
+    print(ctx.message.content)
     if isGradingActive and ctx.author.name not in Users:
         command_string = ctx.message.content
         command_string = command_string.replace('!score', '').strip()
