@@ -19,15 +19,10 @@ isGradingActive = False
 
 class Bot(commands.Bot):
 
-
     def __init__(self):
-        # Initialise our Bot with our access token, prefix and a list of channels to join on boot...
-        # prefix can be a callable, which returns a list of strings or a string...
-        # initial_channels can also be a callable which returns a list of strings...
         super().__init__(token=TOKEN, prefix=BOT_PREFIX, initial_channels=[CHANNEL])
 
     async def event_ready(self):
-        """ Runs once the bot has established a connection with Twitch """
         print(f"{BOT_NICK} is online!")
 
     @commands.command(name='start')
@@ -85,6 +80,23 @@ class Bot(commands.Bot):
             if 10 >= value >= 0:
                 Users[user] = value
                 print(f'{len(Users)} and user: {user} score added')
+
+    @commands.command(name="addscore")
+    async def add_user(self, ctx):
+        global isGradingActive, Users
+        if ctx.author.is_mod and isGradingActive:
+            command_string = ctx.message.content
+            command_string = command_string.replace('!score', '').strip()
+            command_string = command_string.split()
+            if command_string[0] not in Users:
+                try:
+                    value = float(command_string[1])
+                    value = round(value, 3)
+                except ValueError:
+                    value = -1
+                if 10 >= value >= 0:
+                    Users[command_string[0]] = value
+                    print(f'{len(Users)} and user: {command_string[0]} score added')
 
 
 if __name__ == "__main__":
