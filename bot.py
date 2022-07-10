@@ -104,11 +104,11 @@ async def on_add(ctx):
             value = -1
         if 10 >= value >= 0:
             Users[user] = value
-            await ctx.send(f'@{user} Score saved')
+            #await ctx.send(f'@{user} Score saved')
         else:
-            await ctx.send(f'@{user} Wrong score format')
+            #await ctx.send(f'@{user} Wrong score format')
     if ctx.author.name in Users:
-        await ctx.send(f'@{user} Already graded')
+        #await ctx.send(f'@{user} Already graded')
 
 
 if __name__ == "__main__":
